@@ -1,0 +1,69 @@
+/* Home Page Styling */
+.homeContainer {
+    font-family: "Arial", sans-serif;
+    background: linear-gradient(to right, #4facfe, #00f2fe);
+    min-height: 100vh;
+    text-align: center;
+  }
+  
+  /* Hero Section */
+  .heroSection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 90vh;
+    color: white;
+    padding: 0 20px;
+  }
+  
+  .heroContent {
+    max-width: 800px;
+  }
+  
+  .title {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    opacity: 0.9;
+  }
+  
+  /* Buttons */
+  .buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+  }
+  
+  .primaryBtn, .secondaryBtn {
+    text-decoration: none;
+    font-size: 1.2rem;
+    padding: 12px 25px;
+    border-radius: 8px;
+    transition: 0.3s ease-in-out;
+  }
+  
+  .primaryBtn {
+    background: #ff6b6b;
+    color: white;
+  }
+  
+  .primaryBtn:hover {
+    background: #ff4757;
+  }
+  
+  .secondaryBtn {
+    background: white;
+    color: #333;
+    border: 2px solid #ff6b6b;
+  }
+  
+  .secondaryBtn:hover {
+    background: #ff6b6b;
+    color: white;
+  }
+  

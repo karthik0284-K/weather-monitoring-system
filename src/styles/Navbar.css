@@ -1,41 +1,59 @@
 /* Navbar Styling */
 nav {
-    background-color: #2563eb; /* Tailwind bg-blue-600 */
-    padding: 16px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Container */
-  .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  /* Title */
-  nav h1 {
-    color: white;
-    font-size: 1.25rem; /* Equivalent to text-xl */
-    font-weight: bold;
-  }
-  
-  /* Navigation Links */
-  nav .space-x-4 {
-    display: flex;
-    gap: 16px;
-  }
-  
-  nav a {
-    color: white;
-    text-decoration: none;
-    font-size: 1rem;
-    transition: color 0.3s ease-in-out;
-  }
-  
-  nav a:hover {
-    color: #dbeafe; /* Light blue on hover */
-    text-decoration: underline;
-  }
-  
+  background-color: #2563eb; /* Tailwind bg-blue-600 */
+  padding: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Container */
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Title */
+nav h1 {
+  color: white;
+  font-size: 1.5rem; /* Slightly larger for emphasis */
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Navigation Links */
+nav .space-x-4 {
+  display: flex;
+  gap: 16px;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: all 0.3s ease-in-out;
+}
+
+nav a:hover {
+  color: #1e40af; /* Darker blue for contrast */
+  background-color: #dbeafe; /* Light blue background */
+  text-decoration: none;
+  transform: scale(1.05); /* Slight zoom effect */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Active Link */
+nav a.active {
+  background-color: #1e40af; /* Darker blue */
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}

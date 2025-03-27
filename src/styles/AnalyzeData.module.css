@@ -1,0 +1,277 @@
+.container {
+    min-height: 100vh;
+    padding: 1.5rem;
+    background-color: var(--gray-50);
+  }
+  
+  .header {
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--gray-800);
+  }
+  
+  .controls {
+    background-color: white;
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray-200);
+  }
+  
+  .controlsInner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  
+  .viewToggle {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .viewButton {
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  
+  .viewButtonActive {
+    background-color: var(--primary);
+    color: white;
+  }
+  
+  .viewButtonInactive {
+    background-color: var(--gray-200);
+    color: var(--gray-700);
+  }
+  
+  .viewButtonInactive:hover {
+    background-color: var(--gray-300);
+  }
+  
+  .dateFilter {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .datePicker {
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-md);
+    padding: 0.5rem;
+    font-family: inherit;
+  }
+  
+  .statsGrid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .statsGrid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .statsGrid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  
+  .chartSection {
+    background-color: white;
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray-200);
+  }
+  
+  .sectionTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--gray-700);
+  }
+  
+  .chartsGrid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+  }
+  
+  @media (min-width: 1024px) {
+    .chartsGrid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  .chartContainer {
+    background-color: white;
+    padding: 1rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--gray-200);
+  }
+  
+  .chartTitle {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--gray-700);
+  }
+  
+  .insightsSection {
+    background-color: white;
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray-200);
+  }
+  
+  .insightsContent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 16rem;
+  }
+  
+  /* Stat Card */
+  .statCard {
+    background-color: white;
+    border-radius: var(--radius);
+    padding: 1rem;
+    box-shadow: var(--shadow-sm);
+    border-left-width: 4px;
+    border-left-style: solid;
+  }
+  
+  .statCardHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .statCardTitle {
+    font-weight: 500;
+    color: var(--gray-500);
+  }
+  
+  .statCardIcon {
+    font-size: 1.5rem;
+  }
+  
+  .statCardValue {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 0.5rem;
+  }
+  
+  .statCardDescription {
+    font-size: 0.875rem;
+    color: var(--gray-500);
+    margin-top: 0.25rem;
+  }
+  
+  /* Alert variants */
+  .alertHigh {
+    background-color: var(--danger);
+    border-left-color: var(--danger);
+  }
+  
+  .alertLow {
+    background-color: var(--primary);
+    border-left-color: var(--primary);
+  }
+  
+  .alertNormal {
+    background-color: var(--success);
+    border-left-color: var(--success);
+  }
+
+  /* Chart specific styles */
+.recharts-cartesian-grid line {
+    stroke: #e5e7eb;
+  }
+  
+  .recharts-cartesian-axis-tick-value {
+    font-size: 0.75rem;
+    fill: #6b7280;
+  }
+  
+  .recharts-legend-item-text {
+    font-size: 0.875rem;
+    color: #4b5563 !important;
+  }
+  
+  .recharts-tooltip {
+    background-color: white !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 0.375rem !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+    padding: 0.5rem !important;
+  }
+  
+  .recharts-tooltip-label {
+    color: #4b5563 !important;
+    font-weight: 500 !important;
+    margin-bottom: 0.25rem !important;
+  }
+  
+  .recharts-tooltip-item {
+    font-size: 0.875rem !important;
+    color: #1f2937 !important;
+  } 
+
+  /* Date specific styles */
+.recharts-cartesian-axis-tick-value {
+    font-size: 0.75rem;
+    fill: #6b7280;
+  }
+  
+  .recharts-tooltip-label {
+    font-weight: 500;
+    color: #4b5563;
+    margin-bottom: 0.25rem;
+  }
+  
+  /* Responsive chart container */
+  .chart-container {
+    position: relative;
+    width: 100%;
+    min-height: 400px;
+  }
+  
+  /* Tooltip styling */
+  .recharts-tooltip-wrapper {
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 0.75rem;
+  }
+  
+  /* Reference line styling */
+  .recharts-reference-line-line {
+    stroke-dasharray: 3 3;
+  }
+  
+  .recharts-reference-line-text {
+    font-size: 0.75rem;
+    fill: #6b7280;
+  }

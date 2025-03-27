@@ -6,6 +6,7 @@ import AnalyzeData from "./pages/AnalyzeData";
 import Locate from "./pages/Locate";
 import SavedAnalytics from "./pages/SavedAnalytics";
 import Compare from "./pages/Compare";
+import './styles/global.css';
 
 function App() {
   return (

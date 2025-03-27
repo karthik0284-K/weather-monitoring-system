@@ -25,9 +25,6 @@ const Navbar = () => {
           <Link to="/compare" className="text-white">
             Compare
           </Link>
-          <Link to="/login" className="text-white">
-            Login
-          </Link>
         </div>
       </div>
     </nav>

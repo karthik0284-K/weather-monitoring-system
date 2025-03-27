@@ -2,14 +2,14 @@ import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";  // ✅ Correct import for Realtime DB
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBImdjeuiYgYnZhlZWMFzXhUlNjKYUudsw",
-  authDomain: "smart-weather-a0993.firebaseapp.com",
-  databaseURL: "https://smart-weather-a0993-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "smart-weather-a0993",
-  storageBucket: "smart-weather-a0993.appspot.com",
-  messagingSenderId: "812400993144",
-  appId: "1:812400993144:web:9ac52f1fe192c2c3b61e8d",
-  measurementId: "G-EP7TKSY7LC"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase

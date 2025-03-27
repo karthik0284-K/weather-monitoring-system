@@ -1,56 +1,326 @@
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background: linear-gradient(135deg, #007bff, #6610f2);
-    padding: 20px;
-    color: white;
-    text-align: center;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+.header {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 2rem 0;
+  color: #2c5282;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.headerIcon {
+  font-size: 2.2rem;
+}
+
+/* Latest Entry Card */
+.latestCard {
+  background: linear-gradient(135deg, #ebf8ff 0%, #bee3f8 100%);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+  border: 1px solid #90cdf4;
+  min-height: 300px;
+}
+
+.latestHeader {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2b6cb0;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.loadingDot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #4299e1;
+  margin-left: 8px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(0.8);
+    opacity: 0.5;
   }
-  
-  .heading {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin-bottom: 20px;
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
   }
-  
-  .cardContainer {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
+}
+
+.latestIcon {
+  font-size: 1.7rem;
+}
+
+.latestGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.latestItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 0.5rem;
+}
+
+.latestItemIcon {
+  font-size: 1.2rem;
+}
+
+.latestItemLabel {
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.latestItemValue {
+  font-weight: 500;
+  color: #2d3748;
+}
+
+.timestamp {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  color: #4a5568;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.clockIcon {
+  font-size: 1.1rem;
+}
+
+.noData {
+  text-align: center;
+  padding: 2rem;
+  color: #4a5568;
+  font-style: italic;
+}
+
+/* Skeleton Loading */
+.skeletonItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 0.5rem;
+}
+
+.skeletonIcon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #e2e8f0;
+}
+
+.skeletonText {
+  height: 20px;
+  width: 80%;
+  background-color: #e2e8f0;
+  border-radius: 4px;
+  animation: shimmer 1.5s infinite linear;
+}
+
+.skeletonTimestamp {
+  grid-column: 1 / -1;
+  height: 20px;
+  width: 60%;
+  margin: 0 auto;
+  background-color: #e2e8f0;
+  border-radius: 4px;
+  animation: shimmer 1.5s infinite linear;
+}
+
+.skeletonCard {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+.skeletonCardHeader {
+  height: 24px;
+  width: 70%;
+  margin: 1rem;
+  background-color: #e2e8f0;
+  border-radius: 4px;
+  animation: shimmer 1.5s infinite linear;
+}
+
+.skeletonCardContent {
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.skeletonDataItem {
+  height: 16px;
+  background-color: #e2e8f0;
+  border-radius: 4px;
+  animation: shimmer 1.5s infinite linear;
+}
+
+.skeletonCardFooter {
+  height: 14px;
+  width: 50%;
+  margin: 0.75rem 1rem;
+  background-color: #e2e8f0;
+  border-radius: 4px;
+  animation: shimmer 1.5s infinite linear;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
   }
-  
-  .card {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 20px;
-    border-radius: 12px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease-in-out;
-    width: 320px;
+  100% {
+    background-position: 200% 0;
   }
-  
-  .card:hover {
-    transform: scale(1.05);
-  }
-  
-  .timestamp {
-    font-size: 1rem;
-    font-weight: bold;
-    color: #f8f9fa;
-    margin-bottom: 10px;
-  }
-  
-  .data {
-    font-size: 1.2rem;
-    margin: 5px 0;
-  }
-  
-  .noData {
-    font-size: 1.2rem;
-    margin-top: 20px;
-  }
-  
+}
+
+/* Date Picker */
+.datePickerContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.datePickerLabel {
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.datePicker {
+  padding: 0.5rem 1rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 0.375rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  font-size: 1rem;
+  color: #4a5568;
+  transition: all 0.2s;
+}
+
+.datePicker:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+}
+
+/* Data Grid */
+.dataGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.dataCard {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+}
+
+.dataCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.dataCardHeader {
+  font-size: 1.25rem;
+  font-weight: 600;
+  padding: 1rem;
+  background-color: #f7fafc;
+  border-bottom: 1px solid #e2e8f0;
+  color: #2b6cb0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.locationIcon {
+  font-size: 1.3rem;
+}
+
+.dataCardContent {
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.dataItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dataItemIcon {
+  font-size: 1.1rem;
+}
+
+.dataItemLabel {
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 0.9rem;
+}
+
+.dataItemValue {
+  color: #2d3748;
+  font-size: 0.9rem;
+}
+
+.dataCardFooter {
+  padding: 0.75rem 1rem;
+  background-color: #f7fafc;
+  border-top: 1px solid #e2e8f0;
+  font-size: 0.85rem;
+  color: #4a5568;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* No Data Message */
+.noDataMessage {
+  text-align: center;
+  color: #718096;
+  padding: 2rem;
+  font-size: 1.1rem;
+  grid-column: 1 / -1;
+}

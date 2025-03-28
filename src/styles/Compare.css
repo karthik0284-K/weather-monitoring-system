@@ -1,232 +1,236 @@
-/* Compare.css */
 .compare-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 2rem;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #1f2937;
   }
   
   .compare-header {
     text-align: center;
-    margin-bottom: 30px;
-    color: #2c3e50;
+    margin-bottom: 2.5rem;
+    color: #111827;
+    font-weight: 700;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
   }
   
-  .date-selectors {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    align-items: flex-end;
-    margin-bottom: 30px;
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
+  .compare-icon {
+    font-size: 1.8rem;
+  }
+  
+  .date-selector-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 1.5rem;
+    align-items: end;
+    margin-bottom: 2rem;
+    background: #f9fafb;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   }
   
   .date-selector {
     display: flex;
     flex-direction: column;
-    min-width: 200px;
+    gap: 0.5rem;
   }
   
   .date-selector label {
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: #34495e;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #4b5563;
   }
   
   .date-selector input {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 16px;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s;
+    background-color: white;
+  }
+  
+  .date-selector input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
   }
   
   .compare-button {
-    padding: 10px 20px;
-    background-color: #3498db;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
+    font-weight: 600;
     cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
-    height: 40px;
+    transition: all 0.2s;
+    height: fit-content;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   }
   
   .compare-button:hover {
-    background-color: #2980b9;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    transform: translateY(-1px);
   }
   
   .compare-button:disabled {
-    background-color: #95a5a6;
+    background: #d1d5db;
     cursor: not-allowed;
+    transform: none;
   }
   
   .error-message {
-    color: #e74c3c;
+    color: #dc2626;
+    background-color: #fef2f2;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
     text-align: center;
-    margin: 20px 0;
-    padding: 10px;
-    background: #fdecea;
-    border-radius: 4px;
-  }
-  
-  .loading-indicator {
-    text-align: center;
-    padding: 20px;
-    color: #7f8c8d;
+    border-left: 4px solid #dc2626;
   }
   
   .comparison-results {
-    margin-top: 30px;
+    margin-top: 2rem;
+    animation: fadeIn 0.5s ease-out;
   }
   
-  .chart-container {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    margin-bottom: 30px;
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
   }
   
-  .chart-container h3 {
-    margin-top: 0;
-    color: #2c3e50;
-    text-align: center;
+  .metrics-summary h2,
+  .metrics-charts h2 {
+    color: #111827;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e5e7eb;
   }
   
-  .detailed-analysis {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    margin-bottom: 30px;
-  }
-  
-  .detailed-analysis h3 {
-    margin-top: 0;
-    color: #2c3e50;
-    text-align: center;
-  }
-  
-  .analysis-grid {
+  .metrics-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
   }
   
-  .metric-comparison {
-    background: #f8f9fa;
-    padding: 15px;
-    border-radius: 6px;
-    border-left: 4px solid #3498db;
+  .metric-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5e7eb;
+    transition: transform 0.2s, box-shadow 0.2s;
   }
   
-  .metric-comparison h4 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    color: #2c3e50;
+  .metric-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   }
   
-  .comparison-values {
+  .metric-summary {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .metric-summary h4 {
+    margin: 0;
+    font-size: 1.125rem;
+    color: #111827;
+  }
+  
+  .metric-values {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0.5rem 0;
   }
   
   .date-label {
-    font-weight: 600;
-    color: #7f8c8d;
-    margin-right: 5px;
+    font-weight: 500;
+    color: #6b7280;
+    margin-right: 0.5rem;
   }
   
   .metric-value {
     font-weight: 600;
+    color: #111827;
   }
   
-  .comparison-result {
-    font-size: 14px;
-    color: #34495e;
-    padding: 8px;
-    background: #e8f4fc;
-    border-radius: 4px;
-  }
-  
-  .data-summary {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  }
-  
-  .data-summary h3 {
-    margin-top: 0;
-    color: #2c3e50;
-    text-align: center;
-  }
-  
-  .summary-tables {
+  .trend-indicator {
     display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    margin-top: 20px;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
   }
   
-  .summary-table {
-    flex: 1;
-    min-width: 300px;
-    background: #f8f9fa;
-    padding: 15px;
-    border-radius: 6px;
+  .trend-arrow {
+    font-size: 1.25rem;
+    font-weight: bold;
   }
   
-  .summary-table h4 {
-    text-align: center;
+  .trend-arrow.up {
+    color: #10b981;
+  }
+  
+  .trend-arrow.down {
+    color: #ef4444;
+  }
+  
+  .trend-text {
+    font-size: 0.9375rem;
+  }
+  
+  .charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    gap: 2rem;
+  }
+  
+  .chart-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5e7eb;
+  }
+  
+  .chart-card h3 {
     margin-top: 0;
-    color: #2c3e50;
+    margin-bottom: 1rem;
+    color: #111827;
   }
   
-  .summary-table table {
-    width: 100%;
-    border-collapse: collapse;
+  .chart-container {
+    height: 300px;
+    position: relative;
   }
   
-  .summary-table th {
-    background: #3498db;
-    color: white;
-    padding: 10px;
-    text-align: left;
-  }
-  
-  .summary-table td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .summary-table tr:nth-child(even) {
-    background: rgba(255,255,255,0.5);
-  }
-  
-  /* Responsive adjustments */
   @media (max-width: 768px) {
-    .date-selectors {
-      flex-direction: column;
-      align-items: center;
-    }
-    
-    .date-selector {
-      width: 100%;
-    }
-    
-    .compare-button {
-      width: 100%;
-    }
-    
-    .analysis-grid {
+    .date-selector-container {
       grid-template-columns: 1fr;
     }
-  } 
+  
+    .metrics-grid,
+    .charts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .compare-container {
+      padding: 1rem;
+    }
+  
+    .compare-header {
+      font-size: 1.5rem;
+    }
+  }

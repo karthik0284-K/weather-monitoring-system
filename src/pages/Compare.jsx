@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Bar } from 'react-chartjs-2';
+import React, { useState, useEffect } from "react";
+import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -8,10 +8,10 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
-import { ref, onValue } from 'firebase/database';
-import { db } from '../firebase';
-import '../styles/Compare.css';
+} from "chart.js";
+import { ref, onValue } from "firebase/database";
+import { db } from "../firebase";
+import "../styles/Compare.css";
 
 ChartJS.register(
   CategoryScale,
@@ -23,8 +23,8 @@ ChartJS.register(
 );
 
 const Compare = () => {
-  const [date1, setDate1] = useState('');
-  const [date2, setDate2] = useState('');
+  const [date1, setDate1] = useState("");
+  const [date2, setDate2] = useState("");
   const [data1, setData1] = useState(null);
   const [data2, setData2] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -32,22 +32,22 @@ const Compare = () => {
   const [allDates, setAllDates] = useState([]);
 
   const metrics = [
-    { id: 'temperature', name: 'Temperature', unit: '°C' },
-    { id: 'humidity', name: 'Humidity', unit: '%' },
-    { id: 'gas_level', name: 'Gas Level', unit: 'ppm' },
-    { id: 'pressure', name: 'Pressure', unit: 'hPa' },
-    { id: 'altitude', name: 'Altitude', unit: 'm' },
-    { id: 'uv_index', name: 'UV Index', unit: '' }
+    { id: "temperature", name: "Temperature", unit: "°C" },
+    { id: "humidity", name: "Humidity", unit: "%" },
+    { id: "gas_level", name: "Gas Level", unit: "ppm" },
+    { id: "pressure", name: "Pressure", unit: "hPa" },
+    { id: "altitude", name: "Altitude", unit: "m" },
+    { id: "uv_index", name: "UV Index", unit: "" },
   ];
 
   useEffect(() => {
     const fetchDates = () => {
-      const dataRef = ref(db, 'sensor_readings');
+      const dataRef = ref(db, "sensor_readings");
       onValue(dataRef, (snapshot) => {
         if (snapshot.exists()) {
-          const dates = Object.keys(snapshot.val()).map(key => {
+          const dates = Object.keys(snapshot.val()).map((key) => {
             const timestamp = snapshot.val()[key].timestamp;
-            return timestamp.split('_')[0]; // Extract date part
+            return timestamp.split("_")[0]; // Extract date part
           });
           setAllDates([...new Set(dates)]); // Remove duplicates
         }
@@ -59,7 +59,7 @@ const Compare = () => {
 
   const fetchDataForDate = (date) => {
     return new Promise((resolve) => {
-      const dataRef = ref(db, 'sensor_readings');
+      const dataRef = ref(db, "sensor_readings");
       onValue(dataRef, (snapshot) => {
         if (snapshot.exists()) {
           const entries = [];
@@ -69,7 +69,7 @@ const Compare = () => {
               entries.push({
                 id: childSnapshot.key,
                 ...entry,
-                date: parseFirebaseTimestamp(entry.timestamp)
+                date: parseFirebaseTimestamp(entry.timestamp),
               });
             }
           });
@@ -82,15 +82,15 @@ const Compare = () => {
   };
 
   const parseFirebaseTimestamp = (timestamp) => {
-    const [datePart, timePart] = timestamp.split('_');
-    const [year, month, day] = datePart.split('-');
-    const [hour, minute, second] = timePart.split('-');
+    const [datePart, timePart] = timestamp.split("_");
+    const [year, month, day] = datePart.split("-");
+    const [hour, minute, second] = timePart.split("-");
     return new Date(year, month - 1, day, hour, minute, second);
   };
 
   const handleCompare = async () => {
     if (!date1 || !date2) {
-      setError('Please select both dates');
+      setError("Please select both dates");
       return;
     }
 
@@ -100,13 +100,13 @@ const Compare = () => {
     try {
       const [firstDateData, secondDateData] = await Promise.all([
         fetchDataForDate(date1),
-        fetchDataForDate(date2)
+        fetchDataForDate(date2),
       ]);
 
       setData1(calculateDailyStats(firstDateData));
       setData2(calculateDailyStats(secondDateData));
     } catch (err) {
-      setError('Failed to fetch data');
+      setError("Failed to fetch data");
     } finally {
       setLoading(false);
     }
@@ -117,13 +117,15 @@ const Compare = () => {
 
     const stats = {};
     metrics.forEach(({ id }) => {
-      const values = data.map(item => item[id]).filter(val => val !== undefined && val !== null);
+      const values = data
+        .map((item) => item[id])
+        .filter((val) => val !== undefined && val !== null);
       if (values.length === 0) return;
 
       stats[id] = {
         min: Math.min(...values),
         max: Math.max(...values),
-        avg: values.reduce((a, b) => a + b, 0) / values.length
+        avg: values.reduce((a, b) => a + b, 0) / values.length,
       };
     });
 
@@ -134,54 +136,54 @@ const Compare = () => {
     if (!data1 || !data2) return null;
 
     return {
-      labels: ['Date 1', 'Date 2'],
+      labels: ["Date 1", "Date 2"],
       datasets: [
         {
-          label: 'Average',
+          label: "Average",
           data: [data1[metric].avg, data2[metric].avg],
-          backgroundColor: '#4f46e5',
-          borderRadius: 4
+          backgroundColor: "#4f46e5",
+          borderRadius: 4,
         },
         {
-          label: 'Minimum',
+          label: "Minimum",
           data: [data1[metric].min, data2[metric].min],
-          backgroundColor: '#10b981',
-          borderRadius: 4
+          backgroundColor: "#10b981",
+          borderRadius: 4,
         },
         {
-          label: 'Maximum',
+          label: "Maximum",
           data: [data1[metric].max, data2[metric].max],
-          backgroundColor: '#ef4444',
-          borderRadius: 4
-        }
-      ]
+          backgroundColor: "#ef4444",
+          borderRadius: 4,
+        },
+      ],
     };
   };
 
   const formatDate = (dateStr) => {
-    if (!dateStr) return '';
-    const [year, month, day] = dateStr.split('-');
-    return new Date(year, month - 1, day).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    if (!dateStr) return "";
+    const [year, month, day] = dateStr.split("-");
+    return new Date(year, month - 1, day).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
   const getComparisonSummary = (metric) => {
     if (!data1 || !data2) return null;
 
-    const metricInfo = metrics.find(m => m.id === metric);
+    const metricInfo = metrics.find((m) => m.id === metric);
     const diff = data2[metric].avg - data1[metric].avg;
     const percentageChange = (diff / data1[metric].avg) * 100;
 
-    let trend = '';
+    let trend = "";
     if (Math.abs(percentageChange) < 5) {
-      trend = 'remained stable';
+      trend = "remained stable";
     } else if (diff > 0) {
-      trend = 'increased';
+      trend = "increased";
     } else {
-      trend = 'decreased';
+      trend = "decreased";
     }
 
     return (
@@ -190,19 +192,26 @@ const Compare = () => {
         <div className="metric-values">
           <div>
             <span className="date-label">{formatDate(date1)}:</span>
-            <span className="metric-value">{data1[metric].avg.toFixed(1)}{metricInfo.unit}</span>
+            <span className="metric-value">
+              {data1[metric].avg.toFixed(1)}
+              {metricInfo.unit}
+            </span>
           </div>
           <div>
             <span className="date-label">{formatDate(date2)}:</span>
-            <span className="metric-value">{data2[metric].avg.toFixed(1)}{metricInfo.unit}</span>
+            <span className="metric-value">
+              {data2[metric].avg.toFixed(1)}
+              {metricInfo.unit}
+            </span>
           </div>
         </div>
         <div className="trend-indicator">
-          <span className={`trend-arrow ${diff > 0 ? 'up' : 'down'}`}>
-            {diff > 0 ? '↑' : '↓'}
+          <span className={`trend-arrow ${diff > 0 ? "up" : "down"}`}>
+            {diff > 0 ? "↑" : "↓"}
           </span>
           <span className="trend-text">
-            {trend} by {Math.abs(diff).toFixed(1)}{metricInfo.unit} ({Math.abs(percentageChange).toFixed(1)}%)
+            {trend} by {Math.abs(diff).toFixed(1)}
+            {metricInfo.unit} ({Math.abs(percentageChange).toFixed(1)}%)
           </span>
         </div>
       </div>
@@ -226,7 +235,7 @@ const Compare = () => {
             list="availableDates"
           />
         </div>
-        
+
         <div className="date-selector">
           <label htmlFor="date2">Second Date:</label>
           <input
@@ -244,12 +253,12 @@ const Compare = () => {
           ))}
         </datalist>
 
-        <button 
+        <button
           className="compare-button"
           onClick={handleCompare}
           disabled={loading}
         >
-          {loading ? 'Comparing...' : 'Compare Dates'}
+          {loading ? "Comparing..." : "Compare Dates"}
         </button>
       </div>
 
@@ -285,7 +294,7 @@ const Compare = () => {
                             text: `${metric.name} (${metric.unit})`,
                           },
                           legend: {
-                            position: 'bottom',
+                            position: "bottom",
                           },
                         },
                         scales: {
@@ -294,9 +303,9 @@ const Compare = () => {
                             title: {
                               display: true,
                               text: metric.unit,
-                            }
-                          }
-                        }
+                            },
+                          },
+                        },
                       }}
                     />
                   </div>

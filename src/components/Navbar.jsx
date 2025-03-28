@@ -19,8 +19,8 @@ const Navbar = () => {
           <Link to="/locate" className="text-white">
             Locate
           </Link>
-          <Link to="/saved" className="text-white">
-            Saved Analytics
+          <Link to="/view" className="text-white">
+            View Trends
           </Link>
           <Link to="/compare" className="text-white">
             Compare

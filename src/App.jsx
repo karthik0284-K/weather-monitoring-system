@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import RealTimeData from "./pages/RealTimeData";
 import AnalyzeData from "./pages/AnalyzeData";
 import Locate from "./pages/Locate";
-import SavedAnalytics from "./pages/SavedAnalytics";
+import ViewTrends from "./pages/ViewTrends";
 import Compare from "./pages/Compare";
 import './styles/global.css';
 
@@ -19,7 +19,7 @@ function App() {
             <Route path="/real-time" element={<RealTimeData />} />
             <Route path="/analyze" element={<AnalyzeData />} />
             <Route path="/locate" element={<Locate />} />
-            <Route path="/saved" element={<SavedAnalytics />} />
+            <Route path="/view" element={<ViewTrends />} />
             <Route path="/compare" element={<Compare />} />
           </Routes>
         </div>

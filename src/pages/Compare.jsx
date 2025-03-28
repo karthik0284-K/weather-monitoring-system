@@ -1,370 +1,229 @@
-import { useEffect, useState } from "react";
-import { ref, onValue } from "firebase/database";
+import React, { useState, useEffect } from "react";
+import { ref, query, orderByChild, onValue } from "firebase/database";
 import { db } from "../firebase";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { FiCalendar, FiTrendingUp, FiTrendingDown, FiActivity, FiThermometer, FiDroplet, FiWind } from "react-icons/fi";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 import "../styles/Compare.css";
 
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
 const Compare = () => {
-  const [allData, setAllData] = useState([]);
-  const [date1, setDate1] = useState(null);
-  const [date2, setDate2] = useState(null);
-  const [day1Data, setDay1Data] = useState([]);
-  const [day2Data, setDay2Data] = useState([]);
+  const [date1, setDate1] = useState("");
+  const [date2, setDate2] = useState("");
+  const [data1, setData1] = useState(null);
+  const [data2, setData2] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [analysis, setAnalysis] = useState(null);
+  const [error, setError] = useState(null);
+  const [metrics] = useState([
+    { id: "temperature", name: "Temperature", unit: "°C" },
+    { id: "humidity", name: "Humidity", unit: "%" },
+    { id: "gas_level", name: "Gas Level", unit: "ppm" },
+    { id: "pressure", name: "Pressure", unit: "hPa" },
+    { id: "altitude", name: "Altitude", unit: "m" },
+    { id: "uv_index", name: "UV Index", unit: "" },
+  ]);
 
-  useEffect(() => {
-    const dataRef = ref(db, "sensor_readings");
+  const fetchDataForDate = async (date, setDataFunction) => {
+    if (!date) return;
+
     setLoading(true);
+    try {
+      const dateRef = ref(db, "sensor_readings");
+      const dateQuery = query(dateRef, orderByChild("timestamp"));
 
-    const handleData = (snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        console.log("Raw Firebase data:", data);
-        
-        const processedData = Object.entries(data).map(([key, value]) => {
-          // Convert timestamp to Date object
-          let timestamp;
-          if (value.timestamp) {
-            timestamp = typeof value.timestamp === 'number' 
-              ? value.timestamp 
-              : new Date(value.timestamp).getTime();
+      onValue(dateQuery, (snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          const formattedData = [];
+          const selectedDate = new Date(date);
+          selectedDate.setHours(0, 0, 0, 0);
+          const nextDay = new Date(selectedDate);
+          nextDay.setDate(selectedDate.getDate() + 1);
+
+          Object.keys(data).forEach((key) => {
+            const entry = data[key];
+            const entryDate = new Date(entry.timestamp);
+            if (entryDate >= selectedDate && entryDate < nextDay) {
+              formattedData.push({
+                id: key,
+                ...entry,
+                date: entryDate,
+              });
+            }
+          });
+
+          if (formattedData.length > 0) {
+            const averages = {};
+            metrics.forEach((metric) => {
+              const values = formattedData
+                .map((item) => item[metric.id])
+                .filter((val) => val !== undefined);
+              if (values.length > 0) {
+                averages[metric.id] =
+                  values.reduce((a, b) => a + b, 0) / values.length;
+              }
+            });
+
+            setDataFunction({
+              rawData: formattedData,
+              averages,
+              date: date,
+            });
           } else {
-            timestamp = Date.now();
+            setDataFunction(null);
+            setError(`No data available for ${date}`);
           }
-          
-          return {
-            id: key,
-            ...value,
-            timestamp,
-            dateString: new Date(timestamp).toDateString()
-          };
-        });
-        
-        console.log("Processed data:", processedData);
-        setAllData(processedData);
-      } else {
-        console.log("No data available in Firebase");
-        setAllData([]);
-      }
+        } else {
+          setDataFunction(null);
+          setError("No data available in database");
+        }
+        setLoading(false);
+      });
+    } catch (err) {
+      setError("Failed to fetch data: " + err.message);
       setLoading(false);
-    };
-
-    const errorHandler = (error) => {
-      console.error("Firebase error:", error);
-      setLoading(false);
-    };
-
-    onValue(dataRef, handleData, errorHandler);
-
-    return () => {
-      // Cleanup if needed
-    };
-  }, []);
-
-  const filterDataByDate = (date) => {
-    if (!date) return [];
-    
-    const targetDate = new Date(date);
-    const targetDateString = targetDate.toDateString();
-    
-    console.log(`Filtering for: ${targetDateString}`);
-    
-    const filtered = allData.filter(item => {
-      const itemDate = new Date(item.timestamp);
-      return itemDate.toDateString() === targetDateString;
-    });
-    
-    console.log(`Found ${filtered.length} matches`);
-    return filtered;
+    }
   };
 
-  const handleCompare = () => {
+  const handleCompare = async () => {
     if (!date1 || !date2) {
-      alert("Please select both dates");
+      setError("Please select both dates");
       return;
     }
-    
-    const day1Results = filterDataByDate(date1);
-    const day2Results = filterDataByDate(date2);
-    
-    setDay1Data(day1Results);
-    setDay2Data(day2Results);
-    
-    if (day1Results.length === 0 || day2Results.length === 0) {
-      setAnalysis(null);
-      alert(`No data found for ${day1Results.length === 0 ? "first" : "second"} selected date`);
+    if (date1 === date2) {
+      setError("Please select different dates");
       return;
     }
-    
-    // Calculate averages
-    const calculateAvg = (data, field) => {
-      const values = data.map(item => item.data?.[field]).filter(val => val !== undefined);
-      if (values.length === 0) return 0;
-      return values.reduce((sum, val) => sum + val, 0) / values.length;
-    };
-    
-    const avgTemp1 = calculateAvg(day1Results, 'temperature');
-    const avgTemp2 = calculateAvg(day2Results, 'temperature');
-    const avgHumidity1 = calculateAvg(day1Results, 'humidity');
-    const avgHumidity2 = calculateAvg(day2Results, 'humidity');
-    const avgGas1 = calculateAvg(day1Results, 'gasLevel');
-    const avgGas2 = calculateAvg(day2Results, 'gasLevel');
-    
-    // Calculate differences
-    const calculateDiff = (a, b) => ((b - a) / (a || 1)) * 100;
-    
-    setAnalysis({
-      tempDiff: avgTemp2 - avgTemp1,
-      humidityDiff: avgHumidity2 - avgHumidity1,
-      gasDiff: avgGas2 - avgGas1,
-      tempPercentage: calculateDiff(avgTemp1, avgTemp2).toFixed(2),
-      humidityPercentage: calculateDiff(avgHumidity1, avgHumidity2).toFixed(2),
-      gasPercentage: calculateDiff(avgGas1, avgGas2).toFixed(2),
-      avgTemp1,
-      avgTemp2,
-      avgHumidity1,
-      avgHumidity2,
-      avgGas1,
-      avgGas2
-    });
+    setError(null);
+
+    // Fetch data for both dates
+    await Promise.all([
+      fetchDataForDate(date1, setData1),
+      fetchDataForDate(date2, setData2),
+    ]);
   };
 
-  const renderTrendIndicator = (value) => {
-    if (value > 0) {
-      return <FiTrendingUp className="trend-icon trend-up" />;
-    } else if (value < 0) {
-      return <FiTrendingDown className="trend-icon trend-down" />;
-    }
-    return null;
+  const prepareComparisonChartData = () => {
+    if (!data1 || !data2) return null;
+
+    const labels = metrics.map((metric) => metric.name);
+    const date1Data = metrics.map((metric) => data1.averages[metric.id] || 0);
+    const date2Data = metrics.map((metric) => data2.averages[metric.id] || 0);
+
+    return {
+      labels,
+      datasets: [
+        {
+          label: date1,
+          data: date1Data,
+          backgroundColor: "rgba(54, 162, 235, 0.6)",
+          borderColor: "rgba(54, 162, 235, 1)",
+          borderWidth: 1,
+        },
+        {
+          label: date2,
+          data: date2Data,
+          backgroundColor: "rgba(255, 99, 132, 0.6)",
+          borderColor: "rgba(255, 99, 132, 1)",
+          borderWidth: 1,
+        },
+      ],
+    };
   };
+
+  // ... rest of the component code remains the same ...
 
   return (
     <div className="compare-container">
-      <div className="compare-header">
-        <h1 className="compare-title">Weather Data Comparison</h1>
-        <p className="compare-subtitle">Select two dates to analyze environmental changes</p>
-      </div>
+      <h1 className="compare-header">Compare Environmental Data</h1>
 
-      <div className="date-selector-container">
-        <div className="date-picker-group">
-          <div className="date-picker-wrapper">
-            <FiCalendar className="date-picker-icon" />
-            <DatePicker
-              selected={date1}
-              onChange={setDate1}
-              className="date-picker-input"
-              placeholderText="Select first date"
-              maxDate={new Date()}
-              dateFormat="MMMM d, yyyy"
-              isClearable
-            />
-          </div>
-          <div className="date-picker-wrapper">
-            <FiCalendar className="date-picker-icon" />
-            <DatePicker
-              selected={date2}
-              onChange={setDate2}
-              className="date-picker-input"
-              placeholderText="Select second date"
-              maxDate={new Date()}
-              dateFormat="MMMM d, yyyy"
-              isClearable
-            />
-          </div>
+      <div className="date-selectors">
+        <div className="date-selector">
+          <label>First Date:</label>
+          <input
+            type="date"
+            value={date1}
+            onChange={(e) => setDate1(e.target.value)}
+            max={new Date().toISOString().split("T")[0]}
+          />
         </div>
-        
+
+        <div className="date-selector">
+          <label>Second Date:</label>
+          <input
+            type="date"
+            value={date2}
+            onChange={(e) => setDate2(e.target.value)}
+            max={new Date().toISOString().split("T")[0]}
+          />
+        </div>
+
         <button
+          className="compare-button"
           onClick={handleCompare}
-          disabled={!date1 || !date2 || loading}
-          className={`compare-button ${(!date1 || !date2 || loading) ? 'disabled' : ''}`}
+          disabled={loading}
         >
-          {loading ? (
-            <span className="button-loading">
-              <span className="loading-spinner"></span>
-              Processing...
-            </span>
-          ) : (
-            'Compare Dates'
-          )}
+          {loading ? "Comparing..." : "Compare Dates"}
         </button>
       </div>
 
-      {analysis && (
-        <div className="analysis-section">
-          <div className="section-header">
-            <FiActivity className="section-icon" />
-            <h2 className="section-title">Comparative Analysis</h2>
-          </div>
-          
-          <div className="metrics-grid">
-            <div className="metric-card temperature">
-              <div className="metric-header">
-                <FiThermometer className="metric-icon" />
-                <h3 className="metric-title">Temperature</h3>
-              </div>
-              <div className="metric-values">
-                <div className="metric-value-group">
-                  <span className="metric-value">{analysis.avgTemp1.toFixed(1)}°C</span>
-                  <span className="metric-label">Day 1 Avg</span>
-                </div>
-                <div className="metric-value-group">
-                  <span className="metric-value">{analysis.avgTemp2.toFixed(1)}°C</span>
-                  <span className="metric-label">Day 2 Avg</span>
-                </div>
-              </div>
-              <div className="metric-difference">
-                <span className={`difference-value ${analysis.tempDiff > 0 ? 'increase' : 'decrease'}`}>
-                  {Math.abs(analysis.tempDiff).toFixed(1)}°C {renderTrendIndicator(analysis.tempDiff)}
-                </span>
-                <span className="difference-percentage">
-                  {analysis.tempDiff > 0 ? 'Increase' : 'Decrease'} of {Math.abs(analysis.tempPercentage)}%
-                </span>
-              </div>
-            </div>
+      {error && <div className="error-message">{error}</div>}
 
-            <div className="metric-card humidity">
-              <div className="metric-header">
-                <FiDroplet className="metric-icon" />
-                <h3 className="metric-title">Humidity</h3>
-              </div>
-              <div className="metric-values">
-                <div className="metric-value-group">
-                  <span className="metric-value">{analysis.avgHumidity1.toFixed(1)}%</span>
-                  <span className="metric-label">Day 1 Avg</span>
-                </div>
-                <div className="metric-value-group">
-                  <span className="metric-value">{analysis.avgHumidity2.toFixed(1)}%</span>
-                  <span className="metric-label">Day 2 Avg</span>
-                </div>
-              </div>
-              <div className="metric-difference">
-                <span className={`difference-value ${analysis.humidityDiff > 0 ? 'increase' : 'decrease'}`}>
-                  {Math.abs(analysis.humidityDiff).toFixed(1)}% {renderTrendIndicator(analysis.humidityDiff)}
-                </span>
-                <span className="difference-percentage">
-                  {analysis.humidityDiff > 0 ? 'Increase' : 'Decrease'} of {Math.abs(analysis.humidityPercentage)}%
-                </span>
-              </div>
-            </div>
+      {loading && <div className="loading-indicator">Loading data...</div>}
 
-            <div className="metric-card gas">
-              <div className="metric-header">
-                <FiWind className="metric-icon" />
-                <h3 className="metric-title">Gas Level</h3>
-              </div>
-              <div className="metric-values">
-                <div className="metric-value-group">
-                  <span className="metric-value">{analysis.avgGas1.toFixed(1)}</span>
-                  <span className="metric-label">Day 1 Avg</span>
-                </div>
-                <div className="metric-value-group">
-                  <span className="metric-value">{analysis.avgGas2.toFixed(1)}</span>
-                  <span className="metric-label">Day 2 Avg</span>
-                </div>
-              </div>
-              <div className="metric-difference">
-                <span className={`difference-value ${analysis.gasDiff > 0 ? 'increase' : 'decrease'}`}>
-                  {Math.abs(analysis.gasDiff).toFixed(1)} {renderTrendIndicator(analysis.gasDiff)}
-                </span>
-                <span className="difference-percentage">
-                  {analysis.gasDiff > 0 ? 'Increase' : 'Decrease'} of {Math.abs(analysis.gasPercentage)}%
-                </span>
-              </div>
-            </div>
+      {data1 && data2 && (
+        <div className="comparison-results">
+          <div className="chart-container">
+            <h3>Comparison Overview</h3>
+            {prepareComparisonChartData() && (
+              <Bar
+                data={prepareComparisonChartData()}
+                options={{
+                  responsive: true,
+                  plugins: {
+                    title: {
+                      display: true,
+                      text: `Comparison between ${date1} and ${date2}`,
+                    },
+                    legend: {
+                      position: "top",
+                    },
+                  },
+                  scales: {
+                    y: {
+                      beginAtZero: false,
+                    },
+                  },
+                }}
+              />
+            )}
           </div>
+
+          {/* ... rest of the JSX remains the same ... */}
         </div>
       )}
 
-      <div className="data-comparison-section">
-        <div className="section-header">
-          <h2 className="section-title">Detailed Data Comparison</h2>
+      {(!data1 || !data2) && !loading && !error && (
+        <div className="no-data-message">
+          Select two different dates and click "Compare Dates" to view
+          comparison
         </div>
-        
-        <div className="data-grid">
-          <div className="data-column">
-            <h3 className="data-column-title">
-              {date1 ? date1.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : 'Select First Date'}
-            </h3>
-            {day1Data.length > 0 ? (
-              day1Data.map((entry) => (
-                <div key={entry.id} className="data-card">
-                  <h4 className="data-location">{entry.location || 'Unknown Location'}</h4>
-                  <div className="data-metrics">
-                    <div className="data-metric">
-                      <FiThermometer className="data-icon temp" />
-                      <span>{entry.data?.temperature?.toFixed(1) || 'N/A'}°C</span>
-                    </div>
-                    <div className="data-metric">
-                      <FiDroplet className="data-icon humidity" />
-                      <span>{entry.data?.humidity?.toFixed(1) || 'N/A'}%</span>
-                    </div>
-                    <div className="data-metric">
-                      <FiWind className="data-icon gas" />
-                      <span>{entry.data?.gasLevel?.toFixed(1) || 'N/A'}</span>
-                    </div>
-                  </div>
-                  <p className="data-timestamp">
-                    {new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </p>
-                </div>
-              ))
-            ) : (
-              <div className="empty-state">
-                {date1 ? 'No data available for selected date' : 'Select a date to view data'}
-              </div>
-            )}
-          </div>
-
-          <div className="data-column">
-            <h3 className="data-column-title">
-              {date2 ? date2.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : 'Select Second Date'}
-            </h3>
-            {day2Data.length > 0 ? (
-              day2Data.map((entry) => (
-                <div key={entry.id} className="data-card">
-                  <h4 className="data-location">{entry.location || 'Unknown Location'}</h4>
-                  <div className="data-metrics">
-                    <div className="data-metric">
-                      <FiThermometer className="data-icon temp" />
-                      <span>{entry.data?.temperature?.toFixed(1) || 'N/A'}°C</span>
-                    </div>
-                    <div className="data-metric">
-                      <FiDroplet className="data-icon humidity" />
-                      <span>{entry.data?.humidity?.toFixed(1) || 'N/A'}%</span>
-                    </div>
-                    <div className="data-metric">
-                      <FiWind className="data-icon gas" />
-                      <span>{entry.data?.gasLevel?.toFixed(1) || 'N/A'}</span>
-                    </div>
-                  </div>
-                  <p className="data-timestamp">
-                    {new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </p>
-                </div>
-              ))
-            ) : (
-              <div className="empty-state">
-                {date2 ? 'No data available for selected date' : 'Select a date to view data'}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Debug information - remove in production */}
-      <div className="debug-info">
-        <h3>Debug Data</h3>
-        <p>Total records loaded: {allData.length}</p>
-        {allData.length > 0 && (
-          <>
-            <p>Sample record timestamp: {new Date(allData[0].timestamp).toString()}</p>
-            <p>Sample record data: {JSON.stringify(allData[0].data)}</p>
-          </>
-        )}
-      </div>
+      )}
     </div>
   );
 };

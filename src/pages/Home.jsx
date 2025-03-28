@@ -24,7 +24,7 @@ const Home = () => {
         <div className={styles.clouds}></div>
         <div className={styles.stars}></div>
       </div>
-
+      
       {/* Content */}
       <div className={styles.content}>
         <main className={styles.main}>
@@ -33,18 +33,17 @@ const Home = () => {
               Smart <span>Weather</span> Monitoring
             </h1>
             <p className={styles.subtitle}>
-              Real-time environmental analytics with predictive insights and
-              AI-powered forecasting
+              Real-time environmental analytics with predictive insights and AI-powered forecasting
             </p>
-
+            
             <div className={styles.buttons}>
-              <button
+              <button 
                 onClick={() => navigate("/real-time")}
                 className={styles.primaryBtn}
               >
                 Live Dashboard
               </button>
-              <button
+              <button 
                 onClick={() => navigate("/analyze")}
                 className={styles.secondaryBtn}
               >
@@ -52,7 +51,7 @@ const Home = () => {
               </button>
             </div>
           </div>
-
+          
           <section className={styles.features}>
             <div className={styles.featureCard}>
               <div className={styles.featureIcon}>🌦️</div>
@@ -71,7 +70,7 @@ const Home = () => {
             </div>
           </section>
         </main>
-
+        
         <footer className={styles.footer}>
           <p>© {new Date().getFullYear()} Smart Weather Systems</p>
         </footer>

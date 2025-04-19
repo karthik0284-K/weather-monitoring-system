@@ -10,11 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/charts": "^2.2.7",
+    "@ant-design/icons": "^6.0.0",
     "@react-google-maps/api": "^2.20.6",
-    "antd": "^5.24.5",
-    "chart.js": "^4.4.8",
+    "antd": "^5.24.7",
+    "chart.js": "^4.4.9",
+    "chartjs-chart-box-and-violin-plot": "^4.0.0",
     "d3": "^7.9.0",
-    "firebase": "^11.5.0",
+    "date-fns": "^4.1.0",
+    "firebase": "^11.6.0",
     "ml-random-forest": "^2.1.0",
     "ml-regression": "^6.2.0",
     "react": "^19.0.0",
@@ -23,7 +27,8 @@
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.4.0",
-    "recharts": "^2.15.1"
+    "recharts": "^2.15.1",
+    "regression": "^2.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

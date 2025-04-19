@@ -1,0 +1,248 @@
+/* Color Palette */
+:root {
+    --primary-color: #1e3a8a; /* Deep blue */
+    --secondary-color: #3b82f6; /* Bright blue */
+    --accent-color: #10b981; /* Emerald green */
+    --background-color: #f8fafc; /* Light gray */
+    --card-bg: #ffffff; /* White */
+    --text-color: #1f2937; /* Dark gray */
+    --muted-text: #6b7280; /* Muted gray */
+    --border-color: #e5e7eb; /* Light border */
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --transition-duration: 0.3s;
+    --border-radius: 8px;
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Global Container */
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    background: var(--background-color);
+    min-height: 100vh;
+    font-family: var(--font-family);
+    box-sizing: border-box;
+}
+
+/* Header Styling */
+.header {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 32px;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Card Styling */
+.ant-card {
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    border: none;
+    background: var(--card-bg);
+    transition: transform var(--transition-duration) ease, box-shadow var(--transition-duration) ease;
+}
+
+.ant-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.ant-card-head {
+    border-bottom: 1px solid var(--border-color);
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    color: #ffffff;
+    font-weight: 600;
+    padding: 16px;
+    font-size: 1.25rem;
+}
+
+.ant-card-body {
+    padding: 24px;
+}
+
+/* Controls Section */
+.controls {
+    margin-bottom: 32px;
+}
+
+.controls .ant-select-selector,
+.controls .ant-btn {
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    height: 40px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.controls .ant-btn-primary {
+    background: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: #ffffff;
+    transition: background-color var(--transition-duration) ease;
+}
+
+.controls .ant-btn-primary:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Spinner */
+.spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 256px;
+}
+
+/* Chart Container */
+.chart-container {
+    position: relative;
+    background: var(--card-bg);
+    padding: 16px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+/* Descriptions (Regression Results) */
+.ant-descriptions {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+}
+
+.ant-descriptions-item-label {
+    background: #f9fafb;
+    font-weight: 600;
+    color: var(--text-color);
+    padding: 12px;
+}
+
+.ant-descriptions-item-content {
+    color: var(--text-color);
+    padding: 12px;
+}
+
+/* Alert Styling */
+.ant-alert {
+    margin-bottom: 24px;
+    border-radius: 6px;
+    border: none;
+    box-shadow: var(--shadow);
+    padding: 16px;
+}
+
+/* Typography */
+.ant-typography {
+    color: var(--text-color);
+}
+
+.ant-typography-secondary {
+    color: var(--muted-text);
+}
+
+/* Buttons */
+.ant-btn {
+    border-radius: 6px;
+    transition: all var(--transition-duration) ease;
+    padding: 8px 16px;
+}
+
+.ant-btn-primary {
+    background: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: #ffffff;
+}
+
+.ant-btn-primary:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Select Dropdown */
+.ant-select-selector {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all var(--transition-duration) ease;
+}
+
+.ant-select-selector:hover {
+    border-color: var(--secondary-color);
+}
+
+/* Table Styling */
+.ant-table {
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.ant-table-thead > tr > th {
+    background: var(--primary-color);
+    color: #ffffff;
+    font-weight: 600;
+    padding: 12px;
+}
+
+.ant-table-tbody > tr > td {
+    border-bottom: 1px solid var(--border-color);
+    padding: 12px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .container {
+        padding: 16px;
+    }
+
+    .header {
+        font-size: 1.5rem;
+    }
+
+    .controls .ant-col {
+        margin-bottom: 16px;
+    }
+
+    .ant-card-body {
+        padding: 16px;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.ant-card,
+.ant-alert,
+.ant-descriptions {
+    animation: fadeIn var(--transition-duration) ease-out;
+}
+
+/* Row and Column Layout */
+.controls .ant-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -8px;
+    margin-right: -8px;
+}
+
+.controls .ant-col {
+    padding-left: 8px;
+    padding-right: 8px;
+    flex: 1;
+    min-width: 0;
+}
+
+@media (max-width: 576px) {
+    .controls .ant-col {
+        flex: 100%;
+    }
+}

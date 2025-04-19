@@ -17,7 +17,7 @@ const Navbar = () => {
             Analyze Data
           </Link>
           <Link to="/locate" className="text-white">
-            Locate
+            Regression Analysis
           </Link>
           <Link to="/view" className="text-white">
             View Trends
